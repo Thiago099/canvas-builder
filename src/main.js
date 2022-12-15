@@ -1,7 +1,7 @@
 var cel = document.getElementById("flowchart");
 
 
-import { canvas,surface, fillerSurface } from "./canvas-builder/canvas-builder";
+import { canvas,surface, filler_surface } from "./canvas-builder/canvas-builder";
 
 
 function makeDraggable(surface)
@@ -54,7 +54,7 @@ function node(text)
 }
 
 
-var connection = fillerSurface(myc)
+var connection = filler_surface(myc)
 .style(function(ctx,w,h)
 {
   ctx.beginPath();

@@ -12,7 +12,7 @@ export function surface(){
 }
 
 
-export function fillerSurface(canvas){
+export function filler_surface(canvas){
     return surface()
     .parent(canvas)
     .size(canvas.canvas.width,canvas.canvas.height)
