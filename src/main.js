@@ -47,14 +47,16 @@ function node(text)
     ctx.textBaseline = "middle";
     ctx.fillText(text, w/2, h/2);
 
-    connection.update();
   })
   makeDraggable(result)
   return result;
 }
 
-
+const node1 = node("Node 1")
+const node2 = node("Node 2")
 var connection = filler_surface(myc)
+
+connection
 .style(function(ctx,w,h)
 {
   ctx.beginPath();
@@ -64,13 +66,14 @@ var connection = filler_surface(myc)
   ctx.lineWidth = 5;
   ctx.stroke();
 })
+.hook(node1, node2)
 
-const node1 = node("Node 1")
+node1
 .parent(myc)
 .position(25,25)
 .size(100,50)
 
-const node2 = node("Node 2")
+node2
 .parent(myc)
 .position(125+30,25)
 .size(100,50)
