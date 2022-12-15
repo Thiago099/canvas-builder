@@ -10,3 +10,11 @@ export function canvas(canvas){
 export function surface(){
     return new _surface();
 }
+
+
+export function fillerSurface(canvas){
+    return surface()
+    .parent(canvas)
+    .size(canvas.canvas.width,canvas.canvas.height)
+    .position(0,0)
+}

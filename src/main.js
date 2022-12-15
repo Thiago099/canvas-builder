@@ -1,31 +1,88 @@
 var cel = document.getElementById("flowchart");
 
 
-import { canvas,surface } from "./canvas-builder/canvas-builder";
+import { canvas,surface, fillerSurface } from "./canvas-builder/canvas-builder";
 
 
-
+function makeDraggable(surface)
+{
+  var x = surface.x;
+  var y = surface.y;
+  var w = surface.w;
+  var h = surface.h;
+  var dx;
+  var dy;
+  function drag(e)
+  {
+    x = e.offsetX - dx;
+    y = e.offsetY - dy;
+    surface.position(x,y);
+    surface.update()
+  }
+  document.addEventListener("mousedown", function(e) {
+    if(e.offsetX < x || e.offsetX > x + w || e.offsetY < y || e.offsetY > y + h) return
+    dx = e.offsetX - x;
+    dy = e.offsetY - y;
+    document.addEventListener("mousemove", drag);
+    function dragend(e) {
+      document.removeEventListener("mousemove", drag);
+      document.removeEventListener("mouseup", dragend);
+    }
+    document.addEventListener("mouseup", dragend);
+  });
+}
 var myc = canvas(cel);
 
-var myel = surface()
+
+function node(node, text)
+{
+  node.style(
+  function(ctx,w,h)
+  {
+    ctx.fillStyle = "#0077cc";
+    ctx.beginPath();
+    ctx.roundRect(0,0,w,h,5);
+    ctx.fill();
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "20px Arial";
+    // text box
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, w/2, h/2);
+
+    connection.update();
+  })
+  makeDraggable(node1)
+}
+
+
+var connection = fillerSurface(myc)
+.style(function(ctx,w,h)
+{
+  ctx.beginPath();
+  ctx.moveTo(node1.x+node1.w/2,node1.y+node1.h/2);
+  ctx.lineTo(node2.x+node2.w/2,node2.y+node2.h/2);
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 5;
+  ctx.stroke();
+})
+
+var node1 = surface()
 .parent(myc)
 .position(25,25)
 .size(100,50)
-.style(function(ctx,w,h){
-  ctx.fillStyle = "#0077cc";
-  ctx.beginPath();
-  ctx.roundRect(0,0,w,h,5);
-  ctx.fill();
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "20px Arial";
-  // text box
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("Node 1", w/2, h/2);
-})
-.makeDraggable();
 
-myel.update();
+var node2 = surface()
+.parent(myc)
+.position(125+30,25)
+.size(100,50)
+
+node(node1,"Node 1")
+node(node2,"Node 2")
+
+makeDraggable(node2);
+
+myc.update();
 /*
 var x = 25;
 var y = 25;
