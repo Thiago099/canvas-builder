@@ -5,14 +5,45 @@ export class surface{
       this.ctx = this.surface.getContext("2d");
       this.hooks = [];
       this.children = {};
-      this.x = 0;
-      this.y = 0;
-      this.w = 0;
-      this.h = 0;
+      this._x = 0;
+      this._y = 0;
+      this._w = 0;
+      this._h = 0;
+    }
+    get is_renderable() {
+      return this.w > 0 && this.h > 0;
+    }
+    get x() {
+      if(typeof this._x === "function") return this._x();
+      return this._x;
+    }
+    get y() {
+      if(typeof this._y === "function") return this._y();
+      return this._y;
+    }
+    set x(x) {
+      this._x = x;
+    }
+    set y(y) {
+      this._y = y;
+    }
+    get w() {
+      if(typeof this._w === "function") return this._w();
+      return this._w;
+    }
+    get h() {
+      if(typeof this._h === "function") return this._h();
+      return this._h;
+    }
+    set w(w) {
+      this._w = w;
+    }
+    set h(h) {
+      this._h = h;
     }
     position(x,y){
-      this.x = x;
-      this.y = y;
+      this._x = x;
+      this._y = y;
       return this;
     }
     size(w,h){
@@ -50,14 +81,36 @@ export class surface{
       {
         item.update();
       }
-      this.renderStyle({ctx:this.ctx,w:this.w,h:this.h},this.children);
+      if(this.renderStyle)
+      this.renderStyle(
+        {
+          ctx:this.ctx,
+          w:this.w,
+          h:this.h
+        }
+        ,this.children);
+      if(this.canvas)
       this.canvas.refresh();
     }
     update_forced()
     {
       this.ctx.clearRect(0, 0, this.w, this.h);
+      if(this.renderStyle)
       this.renderStyle({ctx:this.ctx,w:this.w,h:this.h},this.children);
+      if(this.canvas)
       this.canvas.refresh();
+    }
+    destroy()
+    {
+      if(this.canvas)
+      {
+        this.canvas.remove(this);
+        this.canvas.update();
+      }
+      for(const children of Object.values(this.children))
+      {
+        children.hooks.splice(children.hooks.indexOf(this),1);
+      }
     }
   }
   
