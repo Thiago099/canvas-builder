@@ -47,8 +47,6 @@ export default function node(canvas,makeInteractive,{inbound,outbound},{x,y},tex
         ctx.fill();
 
 
-
-
         ctx.textBaseline = "middle";
         ctx.font = "15px Arial";
 

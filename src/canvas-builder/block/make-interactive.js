@@ -37,7 +37,6 @@ export default function useMakeInteractive(canvas)
                 document.removeEventListener("mouseup", mouseUp);
             }
 
-            if(dragElement) dragElement.destroy()
             dragElement = target;
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp)
