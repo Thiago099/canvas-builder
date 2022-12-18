@@ -4,6 +4,7 @@ export class surface{
       this.surface = document.createElement("canvas");
       this.ctx = this.surface.getContext("2d");
       this.hooks = [];
+      this.children = {};
       this.x = 0;
       this.y = 0;
       this.w = 0;
@@ -17,8 +18,8 @@ export class surface{
     size(w,h){
       this.w = w;
       this.h = h;
-      this.surface.width = this.canvas.width;
-      this.surface.height = this.canvas.height;
+      this.surface.width = w;
+      this.surface.height =h;
       return this;
     }
     style(renderStyle)
@@ -26,12 +27,15 @@ export class surface{
       this.renderStyle = renderStyle;
       return this;
     }
-    hook(...parent)
+    z_index(z)
     {
-      for(const item of parent)
-      {
-        item.hooks.push(this);
-      }
+      this.z = z;
+      return this;
+    }
+    hook(name,parent)
+    {
+      parent.hooks.push(this);
+      this.children[name] = parent;
       return this;
     }
     parent(canvas)
@@ -42,13 +46,18 @@ export class surface{
     }
     update(){
       this.ctx.clearRect(0, 0, this.w, this.h);
-      this.renderStyle(this.ctx,this.w,this.h);
       for(const item of this.hooks)
       {
         item.update();
       }
+      this.renderStyle({ctx:this.ctx,w:this.w,h:this.h},this.children);
       this.canvas.refresh();
-      return this;
+    }
+    update_forced()
+    {
+      this.ctx.clearRect(0, 0, this.w, this.h);
+      this.renderStyle({ctx:this.ctx,w:this.w,h:this.h},this.children);
+      this.canvas.refresh();
     }
   }
   

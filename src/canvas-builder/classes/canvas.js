@@ -9,7 +9,7 @@ export class canvas{
     refresh()
     {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      for(const item of this.elements)
+      for(const item of this.elements.sort((a,b)=>a.z-b.z))
       {
         this.ctx.drawImage(item.surface,item.x,item.y);
       }
@@ -17,9 +17,9 @@ export class canvas{
     update()
     {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      for(const item of this.elements)
+      for(const item of this.elements.sort((a,b)=>a.z-b.z))
       {
-        item.update()
+        item.update_forced()
         this.ctx.drawImage(item.surface,item.x,item.y);
       }
     }
