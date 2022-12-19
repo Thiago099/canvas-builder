@@ -1,8 +1,6 @@
 
-export class surface{
+export class dummy{
     constructor(){
-      this.surface = document.createElement("canvas");
-      this.ctx = this.surface.getContext("2d");
       this.hooks = [];
       this.children = {};
       this._x = 0;
@@ -49,18 +47,6 @@ export class surface{
     size(w,h){
       this.w = w;
       this.h = h;
-      this.surface.width = w;
-      this.surface.height =h;
-      return this;
-    }
-    style(renderStyle)
-    {
-      this.renderStyle = renderStyle;
-      return this;
-    }
-    z_index(z)
-    {
-      this.z = z;
       return this;
     }
     hook(name,parent)
@@ -69,42 +55,18 @@ export class surface{
       this.children[name] = parent;
       return this;
     }
-    parent(canvas)
-    {
-      canvas.register(this);
-      this.canvas = canvas;
-      return this;
-    }
     update(){
-      this.ctx.clearRect(0, 0, this.w, this.h);
       for(const item of this.hooks)
       {
         item.update();
       }
-      if(this.renderStyle)
-      this.renderStyle(
-        {
-          ctx:this.ctx,
-          w:this.w,
-          h:this.h
-        }
-        ,this.children);
-      if(this.canvas)
-      this.canvas.refresh();
     }
     update_forced()
     {
       this.ctx.clearRect(0, 0, this.w, this.h);
-      if(this.renderStyle)
-      this.renderStyle({ctx:this.ctx,w:this.w,h:this.h},this.children);
     }
     destroy()
     {
-      if(this.canvas)
-      {
-        this.canvas.remove(this);
-        this.canvas.update();
-      }
       for(const children of Object.values(this.children))
       {
         children.hooks.splice(children.hooks.indexOf(this),1);

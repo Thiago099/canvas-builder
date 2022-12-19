@@ -1,4 +1,4 @@
-import { canvas, surface, filler_surface } from "@/canvas-builder/canvas-builder";
+import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-builder";
 import connection from './connection'
 export default function useMakeInteractive(canvas)
 {
@@ -22,8 +22,8 @@ export default function useMakeInteractive(canvas)
         {
             if(distanceBetweenPoints({x:mouse.x-mySurface.x,y:mouse.y-mySurface.y},point) < 10)
             {
-            const source = surface().position(mouse.x,mouse.y)
-            const target = surface().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).hook("target",mySurface)
+            const source = dummy().position(mouse.x,mouse.y)
+            const target = dummy().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).hook("target",mySurface)
             const con = connection(canvas,source,target)
             const mouseMove = e =>{
                 const pm = {x:e.offsetX,y:e.offsetY}
@@ -61,7 +61,7 @@ export default function useMakeInteractive(canvas)
             {
                 if(distanceBetweenPoints({x:mouse.x-mySurface.x,y:mouse.y-mySurface.y},point) < 10)
                 {
-                const target = surface().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).size(0,0).hook("target",mySurface)
+                const target = dummy().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).size(0,0).hook("target",mySurface)
 
 
                 if(dragElement.type == "input")

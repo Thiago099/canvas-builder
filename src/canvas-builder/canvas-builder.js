@@ -2,6 +2,7 @@
 
 import {canvas as _canvas} from "./classes/canvas.js";
 import {surface as _surface} from "./classes/surface";
+import {dummy as _dummy} from "./classes/dummy";
 
 export function canvas(canvas){
   return new _canvas(canvas);
@@ -9,6 +10,11 @@ export function canvas(canvas){
 
 export function surface(){
     return new _surface();
+}
+
+
+export function dummy(){
+  return new _dummy();
 }
 
 

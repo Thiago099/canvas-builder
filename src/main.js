@@ -2,7 +2,7 @@ var cel = document.getElementById("flowchart");
 
 
 import { canvas, surface, filler_surface } from "@/canvas-builder/canvas-builder";
-import useBlock from "@/canvas-builder/block/block";
+import useBlock from "@/block/block";
 
 var myCanvas = canvas(cel);
 const node = useBlock(myCanvas)
