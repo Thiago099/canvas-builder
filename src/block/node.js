@@ -34,7 +34,7 @@ export default function node(canvas,makeInteractive,old)
                 {
                     x:width-10,
                     y:i*padding_output+padding_output+15,
-                    input:"output",
+                    type:"output",
                     name: output[i]
                 })
         }
