@@ -1,8 +1,11 @@
+
+import useMakeInteractive from './make-interactive'
 import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-builder";
 import connection from './connection'
 
-export function useNode(canvas,makeInteractive)
+export function useNode(canvas)
 {
+    const makeInteractive = useMakeInteractive(canvas)
     return function (old)
     {
         var result = surface()

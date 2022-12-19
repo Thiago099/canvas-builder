@@ -29,10 +29,8 @@ const node2 = node(
 
 node2.set({x:400})
 
-
 connect(node1,"test",node2,"a")
 
 
 console.log(node1.data)
 
-myCanvas.update();

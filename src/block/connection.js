@@ -56,12 +56,13 @@ export function useConnect(canvas)
         const source_point = source.surface.points.find(point => point.name == source_item)
         const target_point = target.surface.points.find(point => point.name == target_item)
     
+        var source_dummy, target_dummy
         if(source_point.type == target_point.type) return
     
         if(source_point.type == "output")
         {
-            const source_dummy = dummy().position(()=>target.surface.x+target_point.x,()=>target.surface.y+target_point.y).size(0,0).hook("target",target.surface)
-            const target_dummy = dummy().position(()=>source.surface.x+source_point.x,()=>source.surface.y+source_point.y).size(0,0).hook("source",source.surface)
+            source_dummy = dummy().position(()=>target.surface.x+target_point.x,()=>target.surface.y+target_point.y).size(0,0).hook("target",target.surface)
+            target_dummy = dummy().position(()=>source.surface.x+source_point.x,()=>source.surface.y+source_point.y).size(0,0).hook("source",source.surface)
             source.surface.data.children.push({
                 output:target_point.name,
                 input:source_point.name,
@@ -71,8 +72,8 @@ export function useConnect(canvas)
         }
         else
         {
-            const source_dummy = dummy().position(()=>source.surface.x+source_point.x,()=>source.surface.y+source_point.y).size(0,0).hook("target",source.surface)
-            const target_dummy = dummy().position(()=>target.surface.x+target_point.x,()=>target.surface.y+target_point.y).size(0,0).hook("source",target.surface)
+            source_dummy = dummy().position(()=>source.surface.x+source_point.x,()=>source.surface.y+source_point.y).size(0,0).hook("target",source.surface)
+            target_dummy = dummy().position(()=>target.surface.x+target_point.x,()=>target.surface.y+target_point.y).size(0,0).hook("source",target.surface)
             result.data.children.push({
                 output:source_point.name,
                 input:target_point.name,
@@ -80,5 +81,6 @@ export function useConnect(canvas)
             })
             connection(canvas,source_dummy,target_dummy)
         }
+        source_dummy.update()
     }
 }
