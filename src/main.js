@@ -12,6 +12,8 @@ const node2 = node({input:["a","b","c"],output:["d"],x:250,y:100,name:"Node 2"})
 
 node2.set({x:400})
 
+node1.connect("test",node2,"a")
+
 
 console.log(node1.data)
 
