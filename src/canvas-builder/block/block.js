@@ -5,7 +5,7 @@ export default function useBlock(canvas)
 {
     const makeInteractive = useMakeInteractive(canvas)
     
-    return ({inbound,outbound},{x,y},text)=>{
-        return node(canvas,makeInteractive,{inbound,outbound},{x,y},text)
+    return (data)=>{
+        return node(canvas,makeInteractive,data)
     }
 }

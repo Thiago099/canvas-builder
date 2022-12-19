@@ -6,19 +6,19 @@ export default function useMakeInteractive(canvas)
     var dragElement = null;
 
     function distanceBetweenPoints(point1, point2) {
-    let x1 = point1.x;
-    let y1 = point1.y;
-    let x2 = point2.x;
-    let y2 = point2.y;
+        let x1 = point1.x;
+        let y1 = point1.y;
+        let x2 = point2.x;
+        let y2 = point2.y;
 
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
     function connectStart(mySurface,mouse)
     {
         if(mySurface.data)
         {
-        for(const point of mySurface.data.points)
+        for(const point of mySurface.points)
         {
             if(distanceBetweenPoints({x:mouse.x-mySurface.x,y:mouse.y-mySurface.y},point) < 10)
             {
@@ -37,7 +37,12 @@ export default function useMakeInteractive(canvas)
                 document.removeEventListener("mouseup", mouseUp);
             }
 
-            dragElement = target;
+            dragElement = {
+                target,
+                other:mySurface,
+                name:point.name,
+                type:point.type
+            };
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp)
 
@@ -52,12 +57,34 @@ export default function useMakeInteractive(canvas)
     {
         if(mySurface.data)
         {
-            for(const point of mySurface.data.points)
+            for(const point of mySurface.points)
             {
                 if(distanceBetweenPoints({x:mouse.x-mySurface.x,y:mouse.y-mySurface.y},point) < 10)
                 {
                 const target = surface().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).size(0,0).hook("target",mySurface)
-                const con = connection(canvas,dragElement,target)
+
+
+                if(dragElement.type == "input")
+                {
+                    if(point.type == "input") return
+                    mySurface.data.children.push({
+                        output:point.name,
+                        input:dragElement.name,
+                        target:dragElement.other.data
+                    })
+                }
+                else
+                {
+                    if(point.type == "output") return
+                    dragElement.other.data.children.push({
+                        input:point.name,
+                        output:dragElement.name,
+                        target:mySurface.data
+                    })
+
+                }
+
+                const con = connection(canvas,dragElement.target,target)
 
 
                 return

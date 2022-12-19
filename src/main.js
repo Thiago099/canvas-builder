@@ -4,10 +4,15 @@ var cel = document.getElementById("flowchart");
 import { canvas, surface, filler_surface } from "@/canvas-builder/canvas-builder";
 import useBlock from "@/canvas-builder/block/block";
 
-var myc = canvas(cel);
-const node = useBlock(myc)
+var myCanvas = canvas(cel);
+const node = useBlock(myCanvas)
 
-const node1 = node({inbound:["color","alpha"],outbound:["test"]},{x:10,y:10}, "Node 1")
-const node2 = node({inbound:["a","b","c"],outbound:["d"]},{x:250,y:10},"Node 2")
+const node1 = node({input:["color","alpha"],output:["test"],x:100,y:10,name:"Node 1"})
+const node2 = node({input:["a","b","c"],output:["d"],x:250,y:100,name:"Node 2"})
 
-myc.update();
+node2.set({x:400})
+
+
+console.log(node1.data)
+
+myCanvas.update();
