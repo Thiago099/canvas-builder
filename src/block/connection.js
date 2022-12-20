@@ -1,7 +1,25 @@
+import closestPoint from "closest-point-on-bezier";
 import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-builder";
 export default function connection(canvas,source,target)
     {
     var connection = filler_surface(canvas)
+
+    document.addEventListener("auxclick", click)
+
+    function click(e)
+    {
+        if(e.button != 1) return
+        const {offsetX,offsetY} = e
+        const {relative_position, absolute_point} = closestPoint(
+            connection.curve,
+            {x:offsetX,y:offsetY}
+        )
+        if(Math.sqrt(Math.pow(offsetX - absolute_point.x, 2) + Math.pow(offsetY - absolute_point.y, 2)) < 5)
+        {
+            connection.destroy()
+            document.removeEventListener("auxclick", click)
+        }
+    }
 
     connection
     .z_index(0)
@@ -13,7 +31,7 @@ export default function connection(canvas,source,target)
         {x:target.x+10, y:target.y},
         ]
 
-        const [n1,n2,n3,n4] = [
+        connection.curve = [
         {
             x:p1.x,
             y:p1.y
@@ -32,8 +50,8 @@ export default function connection(canvas,source,target)
         },
         ]
 
-
-
+        const [n1,n2,n3,n4] = connection.curve
+        
         ctx.beginPath();
         ctx.beginPath();
         ctx.moveTo(n1.x, n1.y);
@@ -96,3 +114,12 @@ export function useConnect(canvas)
         source_dummy.update()
     }
 }
+
+
+
+
+
+
+
+
+

@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "vite": "^4.0.0"
+  },
+  "dependencies": {
+    "closest-point-on-bezier": "^1.0.11"
   }
 }
