@@ -5,14 +5,17 @@ export class dummy{
       this.children = {};
       this._x = 0;
       this._y = 0;
+      this._parent = null;
     }
 
     get x() {
-      if(typeof this._x === "function") return this._x();
+      // if(typeof this._x === "function") return this._x();
+      if(this._parent) return this._parent.x + this._x;
       return this._x;
     }
     get y() {
-      if(typeof this._y === "function") return this._y();
+      // if(typeof this._y === "function") return this._y();
+      if(this._parent) return this._parent.y + this._y;
       return this._y;
     }
     set x(x) {
@@ -20,6 +23,13 @@ export class dummy{
     }
     set y(y) {
       this._y = y;
+    }
+
+    parent(parent)
+    {
+      this._parent = parent;
+      this.hook("parent", parent)
+      return this;
     }
 
     position(x,y){
@@ -50,5 +60,9 @@ export class dummy{
         children.hooks.splice(children.hooks.indexOf(this),1);
       }
     }
+    hover(e)
+    {
+      const {offsetX, offsetY} = e;
+      return Math.sqrt(Math.pow(offsetX - this.x, 2) + Math.pow(offsetY - this.y, 2));
+    }
   }
-  

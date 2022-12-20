@@ -14,11 +14,11 @@ export class surface{
       return this.w > 0 && this.h > 0;
     }
     get x() {
-      if(typeof this._x === "function") return this._x();
+      // if(typeof this._x === "function") return this._x();
       return this._x;
     }
     get y() {
-      if(typeof this._y === "function") return this._y();
+      // if(typeof this._y === "function") return this._y();
       return this._y;
     }
     set x(x) {
@@ -28,11 +28,11 @@ export class surface{
       this._y = y;
     }
     get w() {
-      if(typeof this._w === "function") return this._w();
+      // if(typeof this._w === "function") return this._w();
       return this._w;
     }
     get h() {
-      if(typeof this._h === "function") return this._h();
+      // if(typeof this._h === "function") return this._h();
       return this._h;
     }
     set w(w) {
@@ -110,5 +110,31 @@ export class surface{
         children.hooks.splice(children.hooks.indexOf(this),1);
       }
     }
+    hover(e)
+    {
+      const {offsetX, offsetY} = e;
+      if(
+        offsetX < this.x ||
+        offsetX > this.x + this.w ||
+        offsetY < this.y ||
+        offsetY > this.y + this.h
+      )
+      {
+        return true
+      }
+      return false
+    }
+    hover_circle(e,position,radius)
+    {
+      const {offsetX, offsetY} = e;
+      return distanceBetweenPoints({x:offsetX-this.x,y:offsetY-this.y},position) < radius
+    }
   }
-  
+  function distanceBetweenPoints(point1, point2) {
+    let x1 = point1.x;
+    let y1 = point1.y;
+    let x2 = point2.x;
+    let y2 = point2.y;
+
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+}

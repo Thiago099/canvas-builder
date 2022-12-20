@@ -5,25 +5,18 @@ export default function useMakeInteractive(canvas)
     var can_drag = true;
     var dragElement = null;
 
-    function distanceBetweenPoints(point1, point2) {
-        let x1 = point1.x;
-        let y1 = point1.y;
-        let x2 = point2.x;
-        let y2 = point2.y;
 
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    }
 
-    function connectStart(mySurface,mouse)
+    function connectStart(mySurface,e,mouse)
     {
         if(mySurface.data)
         {
         for(const point of mySurface.points)
         {
-            if(distanceBetweenPoints({x:mouse.x-mySurface.x,y:mouse.y-mySurface.y},point) < 10)
+            if(mySurface.hover_circle(e,point,10))
             {
             const source = dummy().position(mouse.x,mouse.y)
-            const target = dummy().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).hook("target",mySurface)
+            const target = dummy().position(point.x,point.y).parent(mySurface)
             const con = connection(canvas,source,target)
             const mouseMove = e =>{
                 const pm = {x:e.offsetX,y:e.offsetY}
@@ -53,15 +46,15 @@ export default function useMakeInteractive(canvas)
         return false
     }
 
-    function connectEnd(mySurface,mouse)
+    function connectEnd(mySurface,e,mouse)
     {
         if(mySurface.data)
         {
             for(const point of mySurface.points)
             {
-                if(distanceBetweenPoints({x:mouse.x-mySurface.x,y:mouse.y-mySurface.y},point) < 10)
+                if(mySurface.hover_circle(e,point,10))
                 {
-                const target = dummy().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).hook("target",mySurface)
+                const target = dummy().position(point.x,point.y).parent(mySurface)
 
 
                 if(dragElement.type == "input")
@@ -104,17 +97,15 @@ export default function useMakeInteractive(canvas)
             mySurface.position(mySurface.x,mySurface.y);
             mySurface.update()
         }
-        
-
         document.addEventListener("mouseup", (e) =>{
             const mouse = {x:e.offsetX,y:e.offsetY}
-            connectEnd(mySurface,mouse)
+            connectEnd(mySurface,e,mouse)
         });
         document.addEventListener("mousedown", (e) => {
             const mouse = {x:e.offsetX,y:e.offsetY}
-            if(mouse.x < mySurface.x || mouse.x > mySurface.x + mySurface.w || mouse.y < mySurface.y || mouse.y > mySurface.y + mySurface.h) return
+            if(mySurface.hover(e)) return
             if(!can_drag) return
-            if(connectStart(mySurface,mouse)) return
+            if(connectStart(mySurface,e,mouse)) return
 
             can_drag = false;
             dx = mouse.x - mySurface.x;

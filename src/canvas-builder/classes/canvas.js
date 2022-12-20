@@ -38,5 +38,12 @@ export class canvas{
       this.elements.splice(this.elements.indexOf(element),1);
       return this;
     }
+    // event(type,func)
+    // {
+    //   this.canvas.addEventListener(type,e=>{
+        
+    //   });
+    //   return this;
+    // }
   }
   
