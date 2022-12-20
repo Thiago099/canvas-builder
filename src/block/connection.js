@@ -9,8 +9,8 @@ export default function connection(canvas,source,target)
     {
 
         const [p1,p2] = [
-        {x:source.x-10+source.w, y:source.y+source.h/2},
-        {x:target.x+10, y:target.y+target.h/2},
+        {x:source.x-10, y:source.y},
+        {x:target.x+10, y:target.y},
         ]
 
         const [n1,n2,n3,n4] = [
@@ -61,8 +61,8 @@ export function useConnect(canvas)
     
         if(source_point.type == "output")
         {
-            source_dummy = dummy().position(()=>target.surface.x+target_point.x,()=>target.surface.y+target_point.y).size(0,0).hook("target",target.surface)
-            target_dummy = dummy().position(()=>source.surface.x+source_point.x,()=>source.surface.y+source_point.y).size(0,0).hook("source",source.surface)
+            source_dummy = dummy().position(()=>target.surface.x+target_point.x,()=>target.surface.y+target_point.y).hook("target",target.surface)
+            target_dummy = dummy().position(()=>source.surface.x+source_point.x,()=>source.surface.y+source_point.y).hook("source",source.surface)
             source.surface.data.children.push({
                 output:target_point.name,
                 input:source_point.name,
@@ -72,8 +72,8 @@ export function useConnect(canvas)
         }
         else
         {
-            source_dummy = dummy().position(()=>source.surface.x+source_point.x,()=>source.surface.y+source_point.y).size(0,0).hook("target",source.surface)
-            target_dummy = dummy().position(()=>target.surface.x+target_point.x,()=>target.surface.y+target_point.y).size(0,0).hook("source",target.surface)
+            source_dummy = dummy().position(()=>source.surface.x+source_point.x,()=>source.surface.y+source_point.y).hook("target",source.surface)
+            target_dummy = dummy().position(()=>target.surface.x+target_point.x,()=>target.surface.y+target_point.y).hook("source",target.surface)
             result.data.children.push({
                 output:source_point.name,
                 input:target_point.name,

@@ -33,4 +33,3 @@ connect(node1,"test",node2,"a")
 
 
 console.log(node1.data)
-

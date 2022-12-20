@@ -61,7 +61,7 @@ export default function useMakeInteractive(canvas)
             {
                 if(distanceBetweenPoints({x:mouse.x-mySurface.x,y:mouse.y-mySurface.y},point) < 10)
                 {
-                const target = dummy().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).size(0,0).hook("target",mySurface)
+                const target = dummy().position(()=>mySurface.x+point.x,()=>mySurface.y+point.y).hook("target",mySurface)
 
 
                 if(dragElement.type == "input")
