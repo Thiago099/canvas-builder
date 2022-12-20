@@ -15,31 +15,36 @@ export default function useMakeInteractive(canvas)
         {
             if(mySurface.hover_circle(e,point,10))
             {
-            const source = dummy().position(mouse.x,mouse.y)
-            const target = dummy().position(point.x,point.y).parent(mySurface)
-            const con = connection(canvas,source,target)
-            const mouseMove = e =>{
-                const pm = {x:e.offsetX,y:e.offsetY}
-                source.position(pm.x,pm.y)
-                source.update()
-            }
-            const mouseUp = e =>{
-                source.destroy()
-                con.destroy()
-                document.removeEventListener("mousemove", mouseMove);
-                document.removeEventListener("mouseup", mouseUp);
-            }
+                const source = dummy()
+                    .position(mouse.x,mouse.y)
 
-            dragElement = {
-                target,
-                other:mySurface,
-                name:point.name,
-                type:point.type
-            };
-            document.addEventListener("mousemove", mouseMove);
-            document.addEventListener("mouseup", mouseUp)
+                const target = dummy()
+                    .position(point.x,point.y)
+                    .parent(mySurface)
+                    
+                const con = connection(canvas,source,target)
+                const mouseMove = e =>{
+                    const pm = {x:e.offsetX,y:e.offsetY}
+                    source.position(pm.x,pm.y)
+                    source.update()
+                }
+                const mouseUp = e =>{
+                    source.destroy()
+                    con.destroy()
+                    document.removeEventListener("mousemove", mouseMove);
+                    document.removeEventListener("mouseup", mouseUp);
+                }
 
-            return true
+                dragElement = {
+                    target,
+                    other:mySurface,
+                    name:point.name,
+                    type:point.type
+                };
+                document.addEventListener("mousemove", mouseMove);
+                document.addEventListener("mouseup", mouseUp)
+
+                return true
             }
         }
         }
@@ -54,7 +59,10 @@ export default function useMakeInteractive(canvas)
             {
                 if(mySurface.hover_circle(e,point,10))
                 {
-                const target = dummy().position(point.x,point.y).parent(mySurface)
+
+                const target = dummy()
+                    .position(point.x,point.y)
+                    .parent(mySurface)
 
 
                 if(dragElement.type == "input")
