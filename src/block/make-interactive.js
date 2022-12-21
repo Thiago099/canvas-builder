@@ -117,6 +117,7 @@ export default function useMakeInteractive(canvas)
         document.addEventListener("mousedown", (e) => {
             const mouse = {x:e.offsetX,y:e.offsetY}
             if(mySurface.hover(e)) return
+            if (e.button !== 0) return;
             if(!can_drag) return
             if(connectStart(mySurface,e,mouse)) return
 
