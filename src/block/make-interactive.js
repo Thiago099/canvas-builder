@@ -60,35 +60,40 @@ export default function useMakeInteractive(canvas)
                 if(mySurface.hover_circle(e,point,10))
                 {
 
-                const target = dummy()
-                    .position(point.x,point.y)
-                    .parent(mySurface)
+                    if(dragElement.other == mySurface) {return}
+
+                    const target = dummy()
+                        .position(point.x,point.y)
+                        .parent(mySurface)
 
 
-                if(dragElement.type == "input")
-                {
-                    if(point.type == "input") return
-                    mySurface.data.children.push({
-                        output:point.name,
-                        input:dragElement.name,
-                        target:dragElement.other.data
-                    })
-                }
-                else
-                {
-                    if(point.type == "output") return
-                    dragElement.other.data.children.push({
-                        input:point.name,
-                        output:dragElement.name,
-                        target:mySurface.data
-                    })
+                    if(dragElement.type == "input")
+                    {
+                        if(point.type == "input") return
+                        if(mySurface.data.children.find(child => child.input == dragElement.name && child.output == point.name)) {return}
+                        mySurface.data.children.push({
+                            output:point.name,
+                            input:dragElement.name,
+                            target:dragElement.other.data
+                        })
+                    }
+                    else
+                    {
+                        if(point.type == "output") return
+                        if(dragElement.other.data.children.find(child => child.input == point.name && child.output == dragElement.name)) {return}
+                        dragElement.other.data.children.push({
+                            input:point.name,
+                            output:dragElement.name,
+                            target:mySurface.data
+                        })
 
-                }
+                    }
+                    console.log(mySurface.data.children)
 
-                const con = connection(canvas,dragElement.target,target)
+                    const con = connection(canvas,dragElement.target,target)
 
 
-                return
+                    return
                 }
             }
         }

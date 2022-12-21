@@ -76,9 +76,12 @@ export function useConnect(canvas)
     
         var source_dummy, target_dummy
         if(source_point.type == target_point.type) return
+        if(source == target) return
     
         if(source_point.type == "output")
         {
+            if(target_point.type == "output") return
+            if(source.surface.data.children.find(child => child.input == target_point.name && child.output == source_point.name)) {return}
             source_dummy = dummy()
                 .position(target_point.x,target_point.y)
                 .parent(target.surface)
@@ -88,14 +91,16 @@ export function useConnect(canvas)
                 .parent(source.surface)
 
             source.surface.data.children.push({
-                output:target_point.name,
-                input:source_point.name,
+                input:target_point.name,
+                output:source_point.name,
                 target:target.data
             })
             connection(canvas,source_dummy,target_dummy)
         }
         else
         {
+            if(target_point.type == "input") return
+            if(target.surface.data.children.find(child => child.input == source_point.name && child.output == target_point.name)) {return}
             source_dummy = dummy()
                 .position(source_point.x,source_point.y)
                 .parent(source.surface)
@@ -104,9 +109,9 @@ export function useConnect(canvas)
                 .position(target_point.x,target_point.y)
                 .parent(target.surface)
 
-            result.data.children.push({
-                output:source_point.name,
-                input:target_point.name,
+            target.surface.data.children.push({
+                input:source_point.name,
+                output:target_point.name,
                 target:target.data
             })
             connection(canvas,source_dummy,target_dummy)
