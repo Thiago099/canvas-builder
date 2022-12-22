@@ -63,6 +63,18 @@ export function useNode(canvas)
                 ctx.beginPath();
                 ctx.roundRect(10,0,w-20,height,5);
                 ctx.fill();
+                //stroke color
+
+                if(surf.selected)
+                {
+
+                    ctx.strokeStyle = "#f0f";
+                    ctx.lineWidth = 4;
+                    //inset stroke
+                    ctx.beginPath();
+                    ctx.roundRect(10+2,0+2,w-20-4,height-4,5);
+                    ctx.stroke();
+                }
         
         
                 ctx.textBaseline = "middle";
@@ -91,6 +103,7 @@ export function useNode(canvas)
                 ctx.textAlign = "center";
                 ctx.fillStyle = "#ffffff";
                 ctx.fillText(name, w/2, 25);
+
         
         
             })

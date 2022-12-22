@@ -58,7 +58,6 @@ export default function connection(canvas,source,target,destroy = ()=>{})
         const [n1,n2,n3,n4] = connection.curve
         
         ctx.beginPath();
-        ctx.beginPath();
         ctx.moveTo(n1.x, n1.y);
         ctx.bezierCurveTo(n2.x, n2.y, n3.x, n3.y, n4.x, n4.y);
         ctx.stroke();

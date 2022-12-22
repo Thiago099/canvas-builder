@@ -1,5 +1,7 @@
 import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-builder";
 import connection, { useConnect } from './connection'
+var dragged = true;
+
 export default function useMakeInteractive(canvas)
 {
     var can_drag = true;
@@ -78,6 +80,7 @@ export default function useMakeInteractive(canvas)
         var dy;
         function drag(e)
         {
+            dragged = true;
             mySurface.surface.x = e.offsetX - dx;
             mySurface.surface.y = e.offsetY - dy;
             mySurface.surface.position(mySurface.surface.x,mySurface.surface.y);
@@ -86,13 +89,22 @@ export default function useMakeInteractive(canvas)
         document.addEventListener("mouseup", (e) =>{
             const mouse = {x:e.offsetX,y:e.offsetY}
             connectEnd(mySurface,e,mouse)
+
+            if(dragged) return
+            mySurface.surface.selected = false
+            mySurface.surface.update()
+            if(mySurface.surface.hover(e)) return
+            mySurface.surface.selected = true
+            mySurface.surface.update()
         });
         document.addEventListener("mousedown", (e) => {
+            dragged = false;
             const mouse = {x:e.offsetX,y:e.offsetY}
-            if(mySurface.surface.hover(e)) return
             if (e.button !== 0) return;
-            if(!can_drag) return
             if(connectStart(mySurface,e,mouse)) return
+
+            if(mySurface.surface.hover(e)) return
+            if(!can_drag) return
 
             can_drag = false;
             dx = mouse.x - mySurface.surface.x;
