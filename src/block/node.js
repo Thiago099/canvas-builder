@@ -8,16 +8,16 @@ export function useNode(canvas)
     const makeInteractive = useMakeInteractive(canvas)
     return function (old)
     {
-        var result = surface()
-        result.data = {}
-        result.data.children = []
-        const entity = {
+        var surf = surface()
+        surf.data = {}
+        surf.data.children = []
+        const result = {
             set,
-            get data(){return result.data},
-            get surface(){return result}
+            get data(){return surf.data},
+            get surface(){return surf}
         }
         set()
-        makeInteractive(entity)
+        makeInteractive(result)
         function set(updated)
         {
             old = Object.assign(old,updated)
@@ -28,11 +28,11 @@ export function useNode(canvas)
         
         
             const padding_input = height/(input.length+1);
-            result.data.name = name
-            result.points = []
+            surf.data.name = name
+            surf.points = []
             for(var i = 0;i<input.length;i++)
             {
-                result.points.push(
+                surf.points.push(
                     {
                         x:10,
                         y:i*padding_input+padding_input+15,
@@ -44,7 +44,7 @@ export function useNode(canvas)
             const padding_output = height/(output.length+1); ;
             for(var i = 0;i<output.length;i++)
             {
-                result.points.push(
+                surf.points.push(
                     {
                         x:width-10,
                         y:i*padding_output+padding_output+15,
@@ -53,11 +53,11 @@ export function useNode(canvas)
                     })
             }
         
-            result
+            surf
             .z_index(1)
             .style(({ctx,w,h}) =>
             {
-                result.size(w,height)
+                surf.size(w,height)
         
                 ctx.fillStyle = "#0077cc";
                 ctx.beginPath();
@@ -69,7 +69,7 @@ export function useNode(canvas)
                 ctx.font = "15px Arial";
         
         
-                for(const point of result.points)
+                for(const point of surf.points)
                 {
                     ctx.beginPath();
                     ctx.fillStyle = "#00ff00";
@@ -96,17 +96,17 @@ export function useNode(canvas)
             })
 
         
-            result
+            surf
             .parent(canvas)
             .position(x,y)
             .size(width,height)
 
-            result.update()
+            surf.update()
         }
 
 
 
-        return entity
+        return result
     }
 }
 
