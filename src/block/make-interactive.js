@@ -6,7 +6,6 @@ export default function useMakeInteractive(canvas)
     var dragElement = null;
 
 
-
     function connectStart(mySurface,e,mouse)
     {
         if(mySurface.data)
@@ -22,7 +21,7 @@ export default function useMakeInteractive(canvas)
                     .position(point.x,point.y)
                     .parent(mySurface)
                     
-                const con = connection(canvas,source,target)
+                const {destroy} = connection(canvas,source,target)
                 const mouseMove = e =>{
                     const pm = {x:e.offsetX,y:e.offsetY}
                     source.position(pm.x,pm.y)
@@ -30,7 +29,7 @@ export default function useMakeInteractive(canvas)
                 }
                 const mouseUp = e =>{
                     source.destroy()
-                    con.destroy()
+                    destroy()
                     document.removeEventListener("mousemove", mouseMove);
                     document.removeEventListener("mouseup", mouseUp);
                 }
@@ -76,6 +75,11 @@ export default function useMakeInteractive(canvas)
                             input:dragElement.name,
                             target:dragElement.other.data
                         })
+                        function destroy()
+                        {
+                            mySurface.data.children = mySurface.data.children.filter(child => child.input != dragElement.name || child.output != point.name)
+                        }
+                        const con = connection(canvas,dragElement.target,target,destroy)
                     }
                     else
                     {
@@ -86,13 +90,12 @@ export default function useMakeInteractive(canvas)
                             output:dragElement.name,
                             target:mySurface.data
                         })
-
+                        function destroy()
+                        {
+                            dragElement.other.data.children = dragElement.other.data.children.filter(child => child.input != point.name || child.output != dragElement.name)
+                        }
+                        const con = connection(canvas,dragElement.target,target,destroy)
                     }
-                    console.log(mySurface.data.children)
-
-                    const con = connection(canvas,dragElement.target,target)
-
-
                     return
                 }
             }

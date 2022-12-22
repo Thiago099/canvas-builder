@@ -1,7 +1,7 @@
 import closestPoint from "closest-point-on-bezier";
 import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-builder";
-export default function connection(canvas,source,target)
-    {
+export default function connection(canvas,source,target,destroy = ()=>{})
+{
     var connection = filler_surface(canvas)
 
     document.addEventListener("auxclick", click)
@@ -16,9 +16,14 @@ export default function connection(canvas,source,target)
         )
         if(Math.sqrt(Math.pow(offsetX - absolute_point.x, 2) + Math.pow(offsetY - absolute_point.y, 2)) < 5)
         {
-            connection.destroy()
-            document.removeEventListener("auxclick", click)
+            self_destroy()
         }
+    }
+    function self_destroy()
+    {
+        connection.destroy()
+        document.removeEventListener("auxclick", click)
+        destroy()
     }
 
     connection
@@ -65,7 +70,7 @@ export default function connection(canvas,source,target)
     .hook("source",source)
     .hook("target",target)
 
-    return connection;
+    return {connection,destroy:self_destroy};
 }
 export function useConnect(canvas)
 {
@@ -77,7 +82,6 @@ export function useConnect(canvas)
         var source_dummy, target_dummy
         if(source_point.type == target_point.type) return
         if(source == target) return
-    
         if(source_point.type == "output")
         {
             if(target_point.type == "output") return
@@ -95,7 +99,11 @@ export function useConnect(canvas)
                 output:source_point.name,
                 target:target.data
             })
-            connection(canvas,source_dummy,target_dummy)
+            function destroy()
+            {
+                source.surface.data.children = source.surface.data.children.filter(child => child.input != target_point.name && child.output != source_point.name)
+            }
+            connection(canvas,source_dummy,target_dummy,destroy)
         }
         else
         {
@@ -114,7 +122,11 @@ export function useConnect(canvas)
                 output:target_point.name,
                 target:target.data
             })
-            connection(canvas,source_dummy,target_dummy)
+            function destroy()
+            {
+                target.surface.data.children = target.surface.data.children.filter(child => child.input != source_point.name && child.output != target_point.name)
+            }
+            connection(canvas,source_dummy,target_dummy, destroy)
         }
         source_dummy.update()
     }
