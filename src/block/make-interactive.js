@@ -1,25 +1,25 @@
 import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-builder";
-import connection from './connection'
+import connection, { useConnect } from './connection'
 export default function useMakeInteractive(canvas)
 {
     var can_drag = true;
     var dragElement = null;
-
+    const connect = useConnect(canvas)
 
     function connectStart(mySurface,e,mouse)
     {
-        if(mySurface.data)
+        if(mySurface.surface.data)
         {
-        for(const point of mySurface.points)
+        for(const point of mySurface.surface.points)
         {
-            if(mySurface.hover_circle(e,point,10))
+            if(mySurface.surface.hover_circle(e,point,10))
             {
                 const source = dummy()
                     .position(mouse.x,mouse.y)
 
                 const target = dummy()
                     .position(point.x,point.y)
-                    .parent(mySurface)
+                    .parent(mySurface.surface)
                     
                 const {destroy} = connection(canvas,source,target)
                 const mouseMove = e =>{
@@ -52,50 +52,20 @@ export default function useMakeInteractive(canvas)
 
     function connectEnd(mySurface,e,mouse)
     {
-        if(mySurface.data)
+        if(mySurface.surface.data)
         {
-            for(const point of mySurface.points)
+            for(const point of mySurface.surface.points)
             {
-                if(mySurface.hover_circle(e,point,10))
+                if(mySurface.surface.hover_circle(e,point,10))
                 {
 
-                    if(dragElement.other == mySurface) {return}
+                    if(dragElement.other == mySurface.surface) {return}
 
                     const target = dummy()
                         .position(point.x,point.y)
-                        .parent(mySurface)
+                        .parent(mySurface.surface)
 
-
-                    if(dragElement.type == "input")
-                    {
-                        if(point.type == "input") return
-                        if(mySurface.data.children.find(child => child.input == dragElement.name && child.output == point.name)) {return}
-                        mySurface.data.children.push({
-                            output:point.name,
-                            input:dragElement.name,
-                            target:dragElement.other.data
-                        })
-                        function destroy()
-                        {
-                            mySurface.data.children = mySurface.data.children.filter(child => child.input != dragElement.name || child.output != point.name)
-                        }
-                        const con = connection(canvas,dragElement.target,target,destroy)
-                    }
-                    else
-                    {
-                        if(point.type == "output") return
-                        if(dragElement.other.data.children.find(child => child.input == point.name && child.output == dragElement.name)) {return}
-                        dragElement.other.data.children.push({
-                            input:point.name,
-                            output:dragElement.name,
-                            target:mySurface.data
-                        })
-                        function destroy()
-                        {
-                            dragElement.other.data.children = dragElement.other.data.children.filter(child => child.input != point.name || child.output != dragElement.name)
-                        }
-                        const con = connection(canvas,dragElement.target,target,destroy)
-                    }
+                    connect(mySurface,point.name,dragElement.other,dragElement.name)
                     return
                 }
             }
@@ -108,10 +78,10 @@ export default function useMakeInteractive(canvas)
         var dy;
         function drag(e)
         {
-            mySurface.x = e.offsetX - dx;
-            mySurface.y = e.offsetY - dy;
-            mySurface.position(mySurface.x,mySurface.y);
-            mySurface.update()
+            mySurface.surface.x = e.offsetX - dx;
+            mySurface.surface.y = e.offsetY - dy;
+            mySurface.surface.position(mySurface.surface.x,mySurface.surface.y);
+            mySurface.surface.update()
         }
         document.addEventListener("mouseup", (e) =>{
             const mouse = {x:e.offsetX,y:e.offsetY}
@@ -119,14 +89,14 @@ export default function useMakeInteractive(canvas)
         });
         document.addEventListener("mousedown", (e) => {
             const mouse = {x:e.offsetX,y:e.offsetY}
-            if(mySurface.hover(e)) return
+            if(mySurface.surface.hover(e)) return
             if (e.button !== 0) return;
             if(!can_drag) return
             if(connectStart(mySurface,e,mouse)) return
 
             can_drag = false;
-            dx = mouse.x - mySurface.x;
-            dy = mouse.y - mySurface.y;
+            dx = mouse.x - mySurface.surface.x;
+            dy = mouse.y - mySurface.surface.y;
             document.addEventListener("mousemove", drag);
             function dragend(e) {
             can_drag = true;

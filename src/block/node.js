@@ -11,8 +11,13 @@ export function useNode(canvas)
         var result = surface()
         result.data = {}
         result.data.children = []
+        const entity = {
+            set,
+            get data(){return result.data},
+            get surface(){return result}
+        }
         set()
-        makeInteractive(result)
+        makeInteractive(entity)
         function set(updated)
         {
             old = Object.assign(old,updated)
@@ -101,11 +106,7 @@ export function useNode(canvas)
 
 
 
-        return {
-            set,
-            get data(){return result.data},
-            get surface(){return result}
-        }
+        return entity
     }
 }
 

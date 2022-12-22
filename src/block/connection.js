@@ -10,7 +10,7 @@ export default function connection(canvas,source,target,destroy = ()=>{})
     {
         if(e.button != 1) return
         const {offsetX,offsetY} = e
-        const {relative_position, absolute_point} = closestPoint(
+        const { absolute_point } = closestPoint(
             connection.curve,
             {x:offsetX,y:offsetY}
         )
