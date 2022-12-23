@@ -103,7 +103,8 @@ export default function useMakeInteractive(canvas)
             connectEnd(mySurface,e,mouse)
 
             setTimeout(() => {
-            dragging = false;},0);
+            dragging = false;
+            },0);
             
             
 
