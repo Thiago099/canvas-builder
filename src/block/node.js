@@ -13,6 +13,7 @@ export function useNode(canvas)
         surf.data.children = []
         const result = {
             set,
+            select : () => {surf.selected = true;surf.update()},
             get data(){return surf.data},
             get surface(){return surf}
         }

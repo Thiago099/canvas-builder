@@ -14,7 +14,7 @@ const node1 = node(
         output:["test"],
         
         x:100,
-        y:10,
+        y:100,
         
     })
 const node2 = node(
@@ -24,9 +24,9 @@ const node2 = node(
         output:["d"],
 
         x:250,
-        y:100,
+        y:180,
     })
-
+node1.select()
 node2.set({x:400})
 
 connect(node1,"test",node2,"a")
