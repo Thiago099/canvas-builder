@@ -4,6 +4,7 @@ var dragged = true;
 
 export default function useMakeInteractive(canvas)
 {
+    var dragging = false;
     var can_drag = true;
     var dragElement = null;
     const connect = useConnect(canvas)
@@ -61,8 +62,6 @@ export default function useMakeInteractive(canvas)
                 if(mySurface.surface.hover_circle(e,point,10))
                 {
 
-                    if(dragElement.other == mySurface.surface) {return}
-
                     const target = dummy()
                         .position(point.x,point.y)
                         .parent(mySurface.surface)
@@ -88,20 +87,35 @@ export default function useMakeInteractive(canvas)
         }
         document.addEventListener("mouseup", (e) =>{
             const mouse = {x:e.offsetX,y:e.offsetY}
+
+            if(!dragging)
+            {
+                if(dragged) return
+                mySurface.surface.selected = false
+                mySurface.surface.update()
+                if(!mySurface.surface.hover(e))
+                {
+                    mySurface.surface.selected = true
+                    mySurface.surface.update()
+                }
+            }
+
             connectEnd(mySurface,e,mouse)
 
-            if(dragged) return
-            mySurface.surface.selected = false
-            mySurface.surface.update()
-            if(mySurface.surface.hover(e)) return
-            mySurface.surface.selected = true
-            mySurface.surface.update()
+            setTimeout(() => {
+            dragging = false;},0);
+            
+            
+
         });
         document.addEventListener("mousedown", (e) => {
             dragged = false;
             const mouse = {x:e.offsetX,y:e.offsetY}
             if (e.button !== 0) return;
-            if(connectStart(mySurface,e,mouse)) return
+            if(connectStart(mySurface,e,mouse)) {
+                dragging = true;
+                return
+            }
 
             if(mySurface.surface.hover(e)) return
             if(!can_drag) return
@@ -110,12 +124,12 @@ export default function useMakeInteractive(canvas)
             dx = mouse.x - mySurface.surface.x;
             dy = mouse.y - mySurface.surface.y;
             document.addEventListener("mousemove", drag);
-            function dragend(e) {
-            can_drag = true;
-            document.removeEventListener("mousemove", drag);
-            document.removeEventListener("mouseup", dragend);
-            }
             document.addEventListener("mouseup", dragend);
+            function dragend(e) {
+                can_drag = true;
+                document.removeEventListener("mousemove", drag);
+                document.removeEventListener("mouseup", dragend);
+            }
         });
     }
     return makeInteractive
