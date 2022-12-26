@@ -86,6 +86,7 @@ export default function useMakeInteractive(canvas)
             mySurface.surface.update()
         }
         document.addEventListener("mouseup", (e) =>{
+            if (e.button !== 0) return;
             const mouse = {x:e.offsetX,y:e.offsetY}
 
             if(!dragging)

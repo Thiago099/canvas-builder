@@ -43,7 +43,7 @@ export default function connection(canvas,source,target,destroy = ()=>{})
         },
         {
             x:p2.x,
-            y:p1.y 
+            y:p1.y
         },
         {
             x:p1.x,
@@ -56,14 +56,15 @@ export default function connection(canvas,source,target,destroy = ()=>{})
         ]
 
         const [n1,n2,n3,n4] = connection.curve
-        
+
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "red";
+
         ctx.beginPath();
         ctx.moveTo(n1.x, n1.y);
         ctx.bezierCurveTo(n2.x, n2.y, n3.x, n3.y, n4.x, n4.y);
         ctx.stroke();
-        ctx.strokeStyle = "red";
-        ctx.lineWidth = 5;
-        ctx.stroke();
+
 
     })
     .hook("source",source)
@@ -73,18 +74,28 @@ export default function connection(canvas,source,target,destroy = ()=>{})
 }
 export function useConnect(canvas)
 {
+    var connections = []
     return function(source, source_item,target,target_item)
     {
-        const source_point = source.surface.points.find(point => point.name == source_item)
-        const target_point = target.surface.points.find(point => point.name == target_item)
+        const source_point = source.surface.points.find(point => point.name == source_item && point.type == "input" || point.type == "multi-input")
+        const target_point = target.surface.points.find(point => point.name == target_item && point.type == "output")
     
         var source_dummy, target_dummy
         if(source_point.type == target_point.type) return
         if(source == target) return
+
+        var data = {}
         if(source_point.type == "output")
         {
             if(target_point.type == "output") return
             if(source.surface.data.children.find(child => child.input == target_point.name && child.output == source_point.name)) {return}
+            console.log()
+            if(target_point.type != "multi-input")
+            {
+                var con = connections.find(connection => connection.data.target == target.data && connection.data.input == target_point.name)
+                if(con)con.destroy()
+            }
+
             source_dummy = dummy()
                 .position(target_point.x,target_point.y)
                 .parent(target.surface)
@@ -93,21 +104,29 @@ export function useConnect(canvas)
                 .position(source_point.x,source_point.y)
                 .parent(source.surface)
 
-            source.surface.data.children.push({
+            data.data = {
                 input:target_point.name,
                 output:source_point.name,
                 target:target.data
-            })
+            }
+            source.surface.data.children.push(data.data)
             function destroy()
             {
+                connections = connections.filter(connection => connection != data)
                 source.surface.data.children = source.surface.data.children.filter(child => child.input != target_point.name && child.output != source_point.name)
             }
-            connection(canvas,source_dummy,target_dummy,destroy)
+            const {destroy:dd} = connection(canvas,source_dummy,target_dummy,destroy)
+            data.destroy = dd
         }
         else
         {
             if(target_point.type == "input") return
             if(target.surface.data.children.find(child => child.input == source_point.name && child.output == target_point.name)) {return}
+            if(source_point.type != "multi-input")
+            {
+                var con = connections.find(connection => connection.data.target == source.data && connection.data.input == source_point.name )
+                if(con)con.destroy()
+            }
             source_dummy = dummy()
                 .position(source_point.x,source_point.y)
                 .parent(source.surface)
@@ -116,17 +135,21 @@ export function useConnect(canvas)
                 .position(target_point.x,target_point.y)
                 .parent(target.surface)
 
-            target.surface.data.children.push({
+            data.data = {
                 input:source_point.name,
                 output:target_point.name,
-                target:target.data
-            })
+                target:source.data
+            }
+            target.surface.data.children.push(data.data)
             function destroy()
             {
+                connections = connections.filter(connection => connection != data)
                 target.surface.data.children = target.surface.data.children.filter(child => child.input != source_point.name && child.output != target_point.name)
             }
-            connection(canvas,source_dummy,target_dummy, destroy)
+            const {destroy:dd} = connection(canvas,source_dummy,target_dummy, destroy)
+            data.destroy = dd
         }
+        connections.push(data)
         source_dummy.update()
     }
 }

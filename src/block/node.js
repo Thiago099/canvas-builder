@@ -6,6 +6,15 @@ import connection from './connection'
 export function useNode(canvas)
 {
     const makeInteractive = useMakeInteractive(canvas)
+    var nodes = []
+    function deselect()
+    {
+        for(const node of nodes)
+        {
+            node.surface.selected = false
+            node.surface.update()
+        }
+    }
     return function (old)
     {
         var surf = surface()
@@ -13,10 +22,11 @@ export function useNode(canvas)
         surf.data.children = []
         const result = {
             set,
-            select : () => {surf.selected = true;surf.update()},
+            select : () => {deselect(),surf.selected = true;surf.update()},
             get data(){return surf.data},
             get surface(){return surf}
         }
+        nodes.push(result)
         set()
         makeInteractive(result)
         function set(updated)
@@ -33,13 +43,27 @@ export function useNode(canvas)
             surf.points = []
             for(var i = 0;i<input.length;i++)
             {
-                surf.points.push(
-                    {
-                        x:10,
-                        y:i*padding_input+padding_input+15,
-                        type:"input",
-                        name: input[i]
-                    })
+                if(input[i][0] == "_")
+                {
+                    surf.points.push(
+                        {
+                            x:10,
+                            y:i*padding_input+padding_input+15,
+                            type:"multi-input",
+                            name: input[i].slice(1),
+                            hidden:true
+                        })   
+                }
+                else
+                {
+                    surf.points.push(
+                        {
+                            x:10,
+                            y:i*padding_input+padding_input+15,
+                            type:"input",
+                            name: input[i]
+                        })
+                }
             }
             
             const padding_output = height/(output.length+1); ;
@@ -86,10 +110,17 @@ export function useNode(canvas)
                 {
                     ctx.beginPath();
                     ctx.fillStyle = "#00ff00";
-                    ctx.arc(point.x,point.y,10,0,2*Math.PI);
+                    if(point.type=="multi-input")
+                    {
+                        ctx.ellipse(point.x, point.y, 10, 15, 0, 0, 2 * Math.PI);
+                    }
+                    else
+                    {
+                        ctx.arc(point.x,point.y,10,0,2*Math.PI);
+                    }
                     ctx.fill();
                     ctx.fillStyle = "#ffffff";
-                    if(point.type=="input")
+                    if(point.type=="input" || point.type=="multi-input")
                     {
                         ctx.textAlign = "start";
                         ctx.fillText(point.name, point.x+15,point.y);
