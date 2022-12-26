@@ -140,6 +140,7 @@ export function useConnect(canvas)
             if(target.surface.data.children.find(child => child.input == source_point.name && child.output == target_point.name)) {return}
             if(source_point.type != "multi-input")
             {
+
                 var con = connections.find(connection => connection.data.target == source.data && connection.data.input == source_point.name )
                 if(con)con.destroy()
             }

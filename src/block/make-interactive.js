@@ -2,12 +2,11 @@ import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-b
 import connection, { useConnect } from './connection'
 var dragged = true;
 
-export default function useMakeInteractive(canvas)
+export default function useMakeInteractive(canvas,connect)
 {
     var dragging = false;
     var can_drag = true;
     var dragElement = null;
-    const connect = useConnect(canvas)
 
     function connectStart(mySurface,e,mouse)
     {

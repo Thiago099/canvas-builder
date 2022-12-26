@@ -4,7 +4,7 @@ import {useConnect} from './connection'
 export default function useBlock(canvas)
 {
     const connect = useConnect(canvas)
-    const node = useNode(canvas)
+    const node = useNode(canvas,connect)
     return {
         node,
         connect
