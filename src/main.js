@@ -80,7 +80,7 @@ connect(d,"media",e,"media")
 
 connect(e,"media",f,"overlays")
 connect(f,"media",g,"media")
-node1.select()
+// node1.select()
 
 // node2.set({x:400})
 

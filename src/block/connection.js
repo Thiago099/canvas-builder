@@ -36,17 +36,18 @@ export default function connection(canvas,source,target,destroy = ()=>{})
         {x:target.x+10, y:target.y},
         ]
 
+        var controlDistance = Math.abs(p1.x - p2.x) / 2;
         connection.curve = [
         {
             x:p1.x,
             y:p1.y
         },
         {
-            x:p2.x,
+            x:p1.x - controlDistance,
             y:p1.y
         },
         {
-            x:p1.x,
+            x:p2.x + controlDistance,
             y:p2.y 
         },
         {
@@ -55,10 +56,25 @@ export default function connection(canvas,source,target,destroy = ()=>{})
         },
         ]
 
+
         const [n1,n2,n3,n4] = connection.curve
 
-        ctx.lineWidth = 5;
+        // ctx.strokeStyle = "cyan";
+
+        // ctx.beginPath();
+        // ctx.moveTo(n1.x, n1.y);
+        // ctx.lineTo(n2.x, n2.y);
+
+        // ctx.stroke();
+
+        // ctx.moveTo(n3.x, n3.y);
+        // ctx.lineTo(n4.x, n4.y);
+
+        
+        ctx.stroke();
         ctx.strokeStyle = "red";
+        ctx.lineWidth = 5;
+
 
         ctx.beginPath();
         ctx.moveTo(n1.x, n1.y);
