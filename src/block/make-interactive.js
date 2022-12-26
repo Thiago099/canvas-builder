@@ -66,7 +66,7 @@ export default function useMakeInteractive(canvas)
                         .position(point.x,point.y)
                         .parent(mySurface.surface)
 
-                    connect(mySurface,point.name,dragElement.other,dragElement.name)
+                    connect(dragElement.other,dragElement.name,mySurface,point.name)
                     return
                 }
             }

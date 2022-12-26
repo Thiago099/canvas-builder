@@ -75,7 +75,7 @@ export default function connection(canvas,source,target,destroy = ()=>{})
 export function useConnect(canvas)
 {
     var connections = []
-    return function(source, source_item,target,target_item)
+    return function(target,target_item,source, source_item)
     {
         const source_point = source.surface.points.find(point => point.name == source_item && point.type == "input" || point.type == "multi-input")
         const target_point = target.surface.points.find(point => point.name == target_item && point.type == "output")
