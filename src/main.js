@@ -35,21 +35,14 @@ const c = node(
         y:300,
     })
 
-const d =node(
-    {
-        name:"Transform",
-        input:["media"],
-        output:["media"],
-        x:410,
-        y:300,
-    })
+
 
 const e =  node(
         {
-            name:"Remap",
+            name:"Edit",
             input:["media"],
             output:["media"],
-            x:610,
+            x:410,
             y:300,
         })
 
@@ -75,8 +68,7 @@ const g = node(
 
 connect(a,"media",f,"background")
 connect(b,"media",c,"media")
-connect(c,"media",d,"media")
-connect(d,"media",e,"media")
+connect(c,"media",e,"media")
 
 connect(e,"media",f,"overlays")
 connect(f,"media",g,"media")

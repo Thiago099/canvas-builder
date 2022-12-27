@@ -23,7 +23,7 @@ export default function useMakeInteractive(canvas,connect)
                     .position(point.x,point.y)
                     .parent(mySurface.surface)
                     
-                const {destroy} = connection(canvas,source,target)
+                const {destroy} = point.type == "output"?connection(canvas,source,target):connection(canvas,target,source)
                 const mouseMove = e =>{
                     const pm = {x:e.offsetX,y:e.offsetY}
                     source.position(pm.x,pm.y)
@@ -65,7 +65,14 @@ export default function useMakeInteractive(canvas,connect)
                         .position(point.x,point.y)
                         .parent(mySurface.surface)
 
-                    connect(dragElement.other,dragElement.name,mySurface,point.name)
+                    if(point.type == "output")
+                    {
+                        connect(mySurface,point.name,dragElement.other,dragElement.name)
+                    }
+                    else
+                    {
+                        connect(dragElement.other,dragElement.name,mySurface,point.name)
+                    }
                     return
                 }
             }
