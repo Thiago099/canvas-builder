@@ -24,9 +24,7 @@ const b =node(
     x:10,
     y:300,
 })
-
-
-const c = node(
+const c =node(
     {
         name:"Copy",
         input:["media"],
@@ -36,23 +34,12 @@ const c = node(
     })
 
 
-
-const e =  node(
-        {
-            name:"Edit",
-            input:["media"],
-            output:["media"],
-            x:410,
-            y:300,
-        })
-
-
 const f = node(
     {
         name:"Overlay",
         input:["background","_overlays"],
         output:["media"],
-        x:810,
+        x:510,
         y:150,
     })
 
@@ -62,17 +49,15 @@ const g = node(
             input:["media"],
             output:[],
     
-            x:1010,
+            x:710,
             y:180,
         })
 
 connect(a,"media",f,"background")
 connect(b,"media",c,"media")
-connect(c,"media",e,"media")
-
-connect(e,"media",f,"overlays")
+connect(c,"media",f,"overlays")
 connect(f,"media",g,"media")
-// node1.select()
+a.select()
 
 // node2.set({x:400})
 
