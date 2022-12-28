@@ -1,5 +1,5 @@
 import './collapsible.css'
-export default function Collapsible({title}, children) {
+export default function Collapsible({title}, ...children) {
     const ref = {}
     const data = effect({hidden:false})
 

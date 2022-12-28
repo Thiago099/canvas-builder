@@ -2,17 +2,87 @@ import "@fortawesome/fontawesome-free/css/all.css";
 var cel = document.getElementById("flowchart");
 var controls = element(document.getElementsByClassName("controls")[0]);
 import Collapsible from "@/components/collapsible";
-function compositionControls()
+
+function cleanNode(name)
 {
     controls.element.innerHTML = "";
     const data = 
     <div>
-        <Collapsible title="Title">
-            Content
+        <Collapsible title="Basic">
+            <div class="row">
+                <div class="input-container">
+                    <label>Name</label>
+                    <input class="input" type="text" value={name} />
+                </div>
+            </div>
         </Collapsible>
     </div>
     data.parent(controls);
+}
+function compositionControls(name)
+{
+    controls.element.innerHTML = "";
+    const data = 
+    <div>
+        <Collapsible title="Basic">
+            <div class="row">
+                <div class="input-container">
+                    <label>Name</label>
+                    <input class="input" type="text" value={name} />
+                </div>
+            </div>
+        </Collapsible>
+        <Collapsible title="Texts">
+            <div class="row">
+                <div class="input-container">
+                    <label>Text 1</label>
+                    <input class="input" type="text" value="$text1" />
+                </div>
+                <div class="input-container">
+                    <label>Text 2</label>
+                    <input class="input" type="text" value="$text2" />
+                </div>
+            </div>
+        </Collapsible>
+        <Collapsible title="Media">
+            <div class="row">
+                <div class="input-container">
+                    <label>Default background audio</label>
+                    <input class="input" type="text" value="audio.mp3" />
+                </div>
+                <div class="input-container">
+                    <label>User media</label>
+                    <input class="input" type="text" value="$media1" />
+                </div>
+            </div>
+        </Collapsible>
+    </div>
+    data.parent(controls);
+}
 
+function copyControls(name)
+{
+    controls.element.innerHTML = "";
+    const data = 
+    <div>
+        <Collapsible title="Basic">
+            <div class="row">
+                <div class="input-container">
+                    <label>Name</label>
+                    <input class="input" type="text" value={name} />
+                </div>
+            </div>
+        </Collapsible>
+        <Collapsible title="Properties">
+            <div class="row">
+                <div class="input-container">
+                    <label>Accessor</label>
+                    <input class="input" type="text" value="$double_lettering" />
+                </div>
+            </div>
+        </Collapsible>
+    </div>
+    data.parent(controls);
 }
 
 
@@ -29,7 +99,7 @@ const a = node(
         output:["media"],
         x:10,
         y:100,
-    },compositionControls)
+    },()=>compositionControls("Main"))
 
 const b =node(
 {
@@ -38,7 +108,7 @@ const b =node(
     output:["media"],
     x:10,
     y:300,
-})
+},()=>compositionControls("Double lettering"))
 const c =node(
     {
         name:"Copy",
@@ -46,7 +116,7 @@ const c =node(
         output:["media"],
         x:210,
         y:300,
-    })
+    },()=>copyControls("Copy"))
 
 
 const f = node(
@@ -56,7 +126,7 @@ const f = node(
         output:["media"],
         x:510,
         y:150,
-    })
+    },()=>cleanNode("Overlay"))
 
 const g = node(
         {
@@ -66,7 +136,7 @@ const g = node(
     
             x:710,
             y:180,
-        })
+        },()=>cleanNode("Scene"))
 
 connect(a,"media",f,"background")
 connect(b,"media",c,"media")
