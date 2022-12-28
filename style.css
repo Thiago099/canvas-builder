@@ -9,7 +9,7 @@ margin-left: 20px;
 body{
     box-sizing: border-box;
     height: 95vh;
-    width: 98vw;
+    width: 100vw;
     display: flex;
     /* justify-content: center; */
     align-items: center;
@@ -19,13 +19,17 @@ body{
 .controls{
     flex-grow: 1;
     height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden;
     margin: 20px;
+
 }
 .row{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+
 }
 
 
