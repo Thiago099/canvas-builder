@@ -32,8 +32,8 @@ export default function useMakeInteractive(canvas,connect)
                 const mouseUp = e =>{
                     source.destroy()
                     destroy()
-                    document.removeEventListener("mousemove", mouseMove);
-                    document.removeEventListener("mouseup", mouseUp);
+                    canvas.canvas.removeEventListener("mousemove", mouseMove);
+                    canvas.canvas.removeEventListener("mouseup", mouseUp);
                 }
 
                 dragElement = {
@@ -42,8 +42,8 @@ export default function useMakeInteractive(canvas,connect)
                     name:point.name,
                     type:point.type
                 };
-                document.addEventListener("mousemove", mouseMove);
-                document.addEventListener("mouseup", mouseUp)
+                canvas.canvas.addEventListener("mousemove", mouseMove);
+                canvas.canvas.addEventListener("mouseup", mouseUp)
 
                 return true
             }
@@ -91,7 +91,7 @@ export default function useMakeInteractive(canvas,connect)
             mySurface.surface.position(mySurface.surface.x,mySurface.surface.y);
             mySurface.surface.update()
         }
-        document.addEventListener("mouseup", (e) =>{
+        canvas.canvas.addEventListener("mouseup", (e) =>{
             if (e.button !== 0) return;
             const mouse = {x:e.offsetX,y:e.offsetY}
 
@@ -117,7 +117,7 @@ export default function useMakeInteractive(canvas,connect)
             
 
         });
-        document.addEventListener("mousedown", (e) => {
+        canvas.canvas.addEventListener("mousedown", (e) => {
             dragged = false;
             const mouse = {x:e.offsetX,y:e.offsetY}
             if (e.button !== 0) return;
@@ -132,12 +132,12 @@ export default function useMakeInteractive(canvas,connect)
             can_drag = false;
             dx = mouse.x - mySurface.surface.x;
             dy = mouse.y - mySurface.surface.y;
-            document.addEventListener("mousemove", drag);
-            document.addEventListener("mouseup", dragend);
+            canvas.canvas.addEventListener("mousemove", drag);
+            canvas.canvas.addEventListener("mouseup", dragend);
             function dragend(e) {
                 can_drag = true;
-                document.removeEventListener("mousemove", drag);
-                document.removeEventListener("mouseup", dragend);
+                canvas.canvas.removeEventListener("mousemove", drag);
+                canvas.canvas.removeEventListener("mouseup", dragend);
             }
         });
     }
