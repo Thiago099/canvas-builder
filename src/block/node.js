@@ -15,20 +15,25 @@ export function useNode(canvas,connect)
             node.surface.update()
         }
     }
-    return function (old)
+    return function (old, onSelect)
     {
         var surf = surface()
         surf.data = {}
         surf.data.children = []
         const result = {
             set,
-            select : () => {deselect(),surf.selected = true;surf.update()},
+            select : () => {
+                deselect();
+                surf.selected = true;
+                surf.update()
+                if(onSelect)onSelect()
+            },
             get data(){return surf.data},
             get surface(){return surf}
         }
         nodes.push(result)
         set()
-        makeInteractive(result)
+        makeInteractive(result,onSelect)
         function set(updated)
         {
             old = Object.assign(old,updated)

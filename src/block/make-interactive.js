@@ -79,7 +79,7 @@ export default function useMakeInteractive(canvas,connect)
         }
     }
 
-    function makeInteractive(mySurface)
+    function makeInteractive(mySurface,onSelect)
     {
         var dx;
         var dy;
@@ -104,6 +104,7 @@ export default function useMakeInteractive(canvas,connect)
                 {
                     mySurface.surface.selected = true
                     mySurface.surface.update()
+                    if(onSelect) onSelect()
                 }
             }
 

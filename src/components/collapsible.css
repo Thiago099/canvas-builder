@@ -1,0 +1,21 @@
+.collapsible{
+    width: 100%;
+}
+.collapsible-header{
+    width: 100%;
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    font-size: 1.3em;
+}
+.collapsible-title{
+    display: inline-block;
+    margin-left: 10px;
+}
+.collapsible-content{
+    padding: 18px;
+}
+.collapsible-hidden{
+    display: none;
+}

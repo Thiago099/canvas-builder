@@ -1,4 +1,19 @@
+import "@fortawesome/fontawesome-free/css/all.css";
 var cel = document.getElementById("flowchart");
+var controls = element(document.getElementsByClassName("controls")[0]);
+import Collapsible from "@/components/collapsible";
+function compositionControls()
+{
+    controls.element.innerHTML = "";
+    const data = 
+    <div>
+        <Collapsible title="Title">
+            Content
+        </Collapsible>
+    </div>
+    data.parent(controls);
+
+}
 
 
 import { canvas, surface, filler_surface } from "@/canvas-builder/canvas-builder";
@@ -14,7 +29,7 @@ const a = node(
         output:["media"],
         x:10,
         y:100,
-    })
+    },compositionControls)
 
 const b =node(
 {
