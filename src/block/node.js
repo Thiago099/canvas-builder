@@ -3,7 +3,7 @@ import useMakeInteractive from './make-interactive'
 import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-builder";
 import connection from './connection'
 
-export function useNode(canvas,connect)
+export function useNode(canvas,connect,selectNothing)
 {
     const makeInteractive = useMakeInteractive(canvas,connect)
     var nodes = []

@@ -2,7 +2,10 @@ import "@fortawesome/fontawesome-free/css/all.css";
 var cel = document.getElementById("flowchart");
 var controls = element(document.getElementsByClassName("controls")[0]);
 import Collapsible from "@/components/collapsible";
-
+function selectNothing()
+{
+    controls.element.innerHTML = "";
+}
 function cleanNode(name)
 {
     controls.element.innerHTML = "";
@@ -90,7 +93,7 @@ import { canvas, surface, filler_surface } from "@/canvas-builder/canvas-builder
 import useBlock from "@/block/block";
 
 var myCanvas = canvas(cel);
-const {node,connect} = useBlock(myCanvas)
+const {node,connect} = useBlock(myCanvas,selectNothing)
 
 const a = node(
     {

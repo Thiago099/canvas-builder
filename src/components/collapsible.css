@@ -1,6 +1,5 @@
 .collapsible{
     width: 100%;
-    margin-bottom: 10px;
 }
 .collapsible-header{
     width: 100%;
@@ -9,7 +8,7 @@
     cursor: pointer;
     padding: 18px;
     font-size: 1.3em;
-    border-radius: 10px;
+    border-bottom: 3px solid #ddd;
 }
 .collapsible-title{
     display: inline-block;
