@@ -7,7 +7,7 @@ export default function useMakeInteractive(canvas,connect)
     var dragging = false;
     var can_drag = true;
     var dragElement = null;
-
+    var any_drag = false;
     function connectStart(mySurface,e,mouse)
     {
         if(mySurface.surface.data)
@@ -122,18 +122,27 @@ export default function useMakeInteractive(canvas,connect)
                 return
             }
 
+            setTimeout(() => {
+                if(!any_drag) drag_start()
+            });
+
             if(mySurface.surface.hover(e)) return
             if(!can_drag) return
-
+            any_drag = true;
             can_drag = false;
-            dx = mouse.x - mySurface.surface.x;
-            dy = mouse.y - mySurface.surface.y;
-            canvas.canvas.addEventListener("mousemove", drag);
-            canvas.canvas.addEventListener("mouseup", dragend);
-            function dragend(e) {
-                can_drag = true;
-                canvas.canvas.removeEventListener("mousemove", drag);
-                canvas.canvas.removeEventListener("mouseup", dragend);
+            drag_start()
+            function drag_start()
+            {
+                dx = mouse.x - mySurface.surface.x;
+                dy = mouse.y - mySurface.surface.y;
+                canvas.canvas.addEventListener("mousemove", drag);
+                canvas.canvas.addEventListener("mouseup", dragend);
+                function dragend(e) {
+                    any_drag = false;
+                    can_drag = true;
+                    canvas.canvas.removeEventListener("mousemove", drag);
+                    canvas.canvas.removeEventListener("mouseup", dragend);
+                }
             }
         });
     }
