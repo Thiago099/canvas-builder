@@ -2,7 +2,7 @@
 import useMakeInteractive from './make-interactive'
 import { canvas, surface, filler_surface,dummy } from "@/canvas-builder/canvas-builder";
 import connection from './connection'
-
+import roundRect from './round-rect'
 export function useNode(canvas,connect,selectNothing)
 {
     const makeInteractive = useMakeInteractive(canvas,connect)
@@ -91,7 +91,7 @@ export function useNode(canvas,connect,selectNothing)
         
                 ctx.fillStyle = "#0077cc";
                 ctx.beginPath();
-                ctx.roundRect(10,0,w-20,height,5);
+                roundRect(ctx,10,0,w-20,height,5);
                 ctx.fill();
                 //stroke color
 
@@ -102,7 +102,7 @@ export function useNode(canvas,connect,selectNothing)
                     ctx.lineWidth = 4;
                     //inset stroke
                     ctx.beginPath();
-                    ctx.roundRect(10+2,0+2,w-20-4,height-4,5);
+                    roundRect(ctx,10+2,0+2,w-20-4,height-4,5);
                     ctx.stroke();
                 }
         
